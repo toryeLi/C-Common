@@ -10,6 +10,8 @@ namespace CommonTest
     {
         static void Main(string[] args)
         {
+            ExpressionVistorTest.Show();
+            Console.ReadLine();
         }
     }
 }

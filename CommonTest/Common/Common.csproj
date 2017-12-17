@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="ExpressionDemo\DBExtend\SqlOperator.cs" />
+    <Compile Include="ExpressionDemo\Visitor\ConditionBuilderVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
