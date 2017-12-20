@@ -17,7 +17,24 @@ namespace CommonTest
                 Expression<Func<PeopleModel, bool>> lambda = x => x.Age > 5 && x.Id > 5;
                 ConditionBuilderVisitor vistor = new ConditionBuilderVisitor();
                 vistor.Visit(lambda);
-               string sql= vistor.Condition();
+               Console.WriteLine( vistor.Condition());
+            }
+            {
+                Expression<Func<PeopleModel, bool>> lambda = x => x.Age > 5 || x.Name=="A" && x.Id > 5;
+                ConditionBuilderVisitor vistor = new ConditionBuilderVisitor();
+                vistor.Visit(lambda);
+                Console.WriteLine("x => x.Age > 5 || x.Name==\"A\" && x.Id > 5:" + vistor.Condition());
+            }
+            {
+                Expression<Func<PeopleModel, bool>> lambda = x => x.Age > 5 || x.Name == "A" && x.Id > 5;
+                ConditionBuilderVisitor vistor = new ConditionBuilderVisitor();
+                vistor.Visit(lambda);
+                Console.WriteLine("x => x.Age > 5 || x.Name==\"A\" && x.Id > 5:" + vistor.Condition());
+            }
+            {
+                if (true) {
+                    Expression<Func<int, bool>> exp1 = x => x > 1;
+                }
             }
         }
     }

@@ -1,0 +1,4 @@
+﻿表达式树作用：
+1 可以将Linq解析成任何查询语句，比如：将Linq查询语句解析成sql server查询语句、
+将Linq查询语句解析成MySql查询语句，Resds查询语句
+2 在EF中的应用，在前端有多个查询条件时，应该传入Expression

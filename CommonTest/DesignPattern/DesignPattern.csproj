@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{14356FF7-ACC5-45D4-BDE5-1A5510BB0311}</ProjectGuid>
+    <ProjectGuid>{141F0618-CD96-47BA-B152-C65DED0F42AD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common</RootNamespace>
-    <AssemblyName>Common</AssemblyName>
+    <RootNamespace>DesignPattern</RootNamespace>
+    <AssemblyName>DesignPattern</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,12 +41,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="ExpressionDemo\DBExtend\SqlOperator.cs" />
-    <Compile Include="ExpressionDemo\Visitor\ConditionBuilderVisitor.cs" />
+    <Compile Include="Decoration\AbstractDecoration.cs" />
+    <Compile Include="Decoration\hair\BalckHair.cs" />
+    <Compile Include="Decoration\Hunter.cs" />
+    <Compile Include="Decoration\IFunction.cs" />
+    <Compile Include="Decoration\Mage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ExpressionDemo\表达式树技术说明.txt" />
+    <Content Include="Decoration\装饰器模式.txt" />
+    <Content Include="设计模式.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
