@@ -44,9 +44,12 @@
     <Compile Include="ExpressionDemo\DBExtend\SqlOperator.cs" />
     <Compile Include="ExpressionDemo\Visitor\ConditionBuilderVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialize\SeralizeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExpressionDemo\表达式树技术说明.txt" />
+    <Content Include="Serialize\序列化说明.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -53,9 +53,17 @@
       <Project>{14356ff7-acc5-45d4-bde5-1a5510bb0311}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DesignPattern\DesignPattern.csproj">
+      <Project>{141f0618-cd96-47ba-b152-c65ded0f42ad}</Project>
+      <Name>DesignPattern</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{9d63c979-0349-4703-891c-9926f669c76e}</Project>
       <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyThreads\MyThreads.csproj">
+      <Project>{cba5bd2f-0867-4a4c-b456-2ed9c74082d8}</Project>
+      <Name>MyThreads</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

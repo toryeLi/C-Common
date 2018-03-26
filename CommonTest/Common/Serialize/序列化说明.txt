@@ -1,0 +1,184 @@
+﻿序列化，它又称串行化，是.NET运行时环境用来支持用户定义类型的流化的机制。序列化就是把一个对象保存到一个文件或数据库字段中去，反序列化就是在适当的时候把这个文件再转化成原来的对象使用。其目的是以某种存储形成使自定义对象持久化，或者将这种对象从一个地方传输到另一个地方。
+
+(1).NET支持对象序列化的几种方式
+二进制序列化：对象序列化之后是二进制形式的，通过BinaryFormatter类来实现的，这个类位于System.Runtime.Serialization.Formatters.Binary命名空间下。
+SOAP序列化：对象序列化之后的结果符合SOAP协议，也就是可以通过SOAP 协议传输，通过System.Runtime.Serialization.Formatters.Soap命名空间下的SoapFormatter类来实现的。
+XML序列化：对象序列化之后的结果是XML形式的，通过XmlSerializer 类来实现的，这个类位于System.Xml.Serialization命名空间下。XML序列化不能序列化私有数据。
+(2)几种序列化的区别
+二进制格式和SOAP格式可序列化一个类型的所有可序列化字段，不管它是公共字段还是私有字段。XML格式仅能序列化公共字段或拥有公共属性的私有字段，未通过属性公开的私有字段将被忽略。
+使用二进制格式序列化时，它不仅是将对象的字段数据进行持久化，也持久化每个类型的完全限定名称和定义程序集的完整名称（包括包称、版本、公钥标记、区域性），这些数据使得在进行二进制格式反序列化时亦会进行类型检查。SOAP格式序列化通过使用XML命名空间来持久化原始程序集信息。而XML格式序列化不会保存完整的类型名称或程序集信息。这便利XML数据表现形式更有终端开放性。如果希望尽可能延伸持久化对象图的使用范围时，SOAP格式和XML格式是理想选择。
+(3)使用特性对序列化的控制
+要让一个对象支持.Net序列化服务，用户必须为每一个关联的类加上[Serializable]特性。如果类中有些成员不适合参与序列化（比如：密码字段），可以在这些域前加上[NonSerialized]特性。
+2.使用二进制序列化和反序列化
+(1)二进制序列化与反序列化的程序示例
+    [Serializable]  //必须添加序列化特性
+    public class Person
+    {
+        private string Name;//姓名
+        private bool Sex;//性别，是否是男
+        public Person(string name, bool sex)
+        {
+            this.Name = name;
+            this.Sex = sex;
+        }
+        public override string ToString()
+        {
+            return "姓名：" + this.Name + "\t性别：" + (this.Sex ? "男" : "女");
+        }
+    }
+    [Serializable]  //必须添加序列化特性
+    public class Programmer : Person
+    {
+        private string Language;//编程语言
+        public Programmer(string name, bool sex, string language) : base(name, sex)
+        {
+            this.Language = language;
+        }
+        public override string ToString()
+        {
+            return base.ToString() + "\t编程语言：" + this.Language;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //创建Programmer列表，并添加对象
+            List<Programmer> list = new List<Programmer>();
+            list.Add(new Programmer("李志伟", true, "C#"));
+            list.Add(new Programmer("Coder2", false, "C++"));
+            list.Add(new Programmer("Coder3", true, "Java"));
+            //使用二进制序列化对象
+            string fileName = @"D:\users\lizw\桌面\Programmers.dat";//文件名称与路径
+            Stream fStream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
+            BinaryFormatter binFormat = new BinaryFormatter();//创建二进制序列化器
+            binFormat.Serialize(fStream, list);
+            //使用二进制反序列化对象
+            list.Clear();//清空列表
+            fStream.Position = 0;//重置流位置
+            list = (List<Programmer>)binFormat.Deserialize(fStream);//反序列化对象
+            foreach (Programmer p in list)
+            {
+                Console.WriteLine(p);
+            }
+            Console.Read();
+        }
+    }
+(2)总结
+使用二进制序列化，必须为每一个要序列化的的类和其关联的类加上[Serializable]特性，对类中不需要序列化的成员可以使用[NonSerialized]特性。
+二进制序列化对象时，能序列化类的所有成员(包括私有的)，且不需要类有无参数的构造方法。
+使用二进制格式序列化时，它不仅是将对象的字段数据进行持久化，也持久化每个类型的完全限定名称和定义程序集的完整名称（包括包称、版本、公钥标记、区域性），这些数据使得在进行二进制格式反序列化时亦会进行类型检查。所以反序列化时的运行环境要与序列化时的运行环境要相同，否者可能会无法反序列化成功。
+3.使用SOAP方式序列化和反序列化
+(1)SOAP序列化与反序列化的程序示例
+    [Serializable]  //必须添加序列化特性
+    public class Person
+    {
+        private string Name;//姓名
+        private bool Sex;//性别，是否是男
+        public Person(string name, bool sex)
+        {
+            this.Name = name;
+            this.Sex = sex;
+        }
+        public override string ToString()
+        {
+            return "姓名：" + this.Name + "\t性别：" + (this.Sex ? "男" : "女");
+        }
+    }
+    [Serializable]  //必须添加序列化特性
+    public class Programmer : Person
+    {
+        private string Language;//编程语言
+        public Programmer(string name, bool sex, string language) : base(name, sex)
+        {
+            this.Language = language;
+        }
+        public override string ToString()
+        {
+            return base.ToString() + "\t编程语言：" + this.Language;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //实例化对象
+            Programmer p = new Programmer("李志伟", true, "C、C#、C++、Java");
+            //使用SOAP序列化对象
+            string fileName = @"D:\users\lizw\桌面\Programmers.xml";//文件名称与路径
+            Stream fStream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
+            SoapFormatter soapFormat = new SoapFormatter();//创建SOAP序列化器
+            soapFormat.Serialize(fStream, p);//SOAP不能序列化泛型对象
+            //使用SOAP反序列化对象
+            fStream.Position = 0;//重置流位置
+            p = null;
+            p = (Programmer)soapFormat.Deserialize(fStream);
+            Console.WriteLine(p);
+            Console.Read();
+        }
+    }
+(2)总结
+SOAP序列化与二进制序列化的区别是：SOAP序列化不能序列化泛型类型。与二进制序列化一样在序列化时不需要向序列化器指定序列化对象的类型。而XML序列化需要向XML序列化器指定序列化对象的类型。
+4.使用XML方式序列化和反序列化
+(1)XML序列化与反序列化的程序示例
+    public class Person
+    {
+        public string Name;//姓名
+        public bool Sex;//性别，是否是男
+        public Person() { }//必须提供无参构造器，否则XmlSerializer将出错
+        public Person(string name, bool sex)
+        {
+            this.Name = name;
+            this.Sex = sex;
+        }
+        public override string ToString()
+        {
+            return "姓名：" + this.Name + "\t性别：" + (this.Sex ? "男" : "女");
+        }
+    }
+    public class Programmer : Person
+    {
+        public string Language;//编程语言
+        public Programmer() { }//必须提供无参构造器，否则XmlSerializer将出错
+        public Programmer(string name, bool sex, string language) : base(name, sex)
+        {
+            this.Language = language;
+        }
+        public override string ToString()
+        {
+            return base.ToString() + "\t编程语言：" + this.Language;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //创建Programmer列表，并添加对象
+            List<Programmer> list = new List<Programmer>();
+            list.Add(new Programmer("李志伟", true, "C#"));
+            list.Add(new Programmer("Coder2", false, "C++"));
+            list.Add(new Programmer("Coder3", true, "Java"));
+            //使用XML序列化对象
+            string fileName = @"D:\users\lizw\桌面\Programmers.xml";//文件名称与路径
+            Stream fStream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
+            XmlSerializer xmlFormat = new XmlSerializer(
+typeof(List<Programmer>),
+new Type[] { typeof(Programmer),typeof(Person) }
+);//创建XML序列化器，需要指定对象的类型
+            xmlFormat.Serialize(fStream, list);
+            //使用XML反序列化对象
+            fStream.Position = 0;//重置流位置
+            list.Clear();
+            list = (List<Programmer>)xmlFormat.Deserialize(fStream);
+            foreach (Programmer p in list)
+            {
+                Console.WriteLine(p);
+            }
+            Console.Read();
+        }
+    }
+(2)总结
+使用XML序列化或反序列化时，需要对XML序列化器指定需要序列化对象的类型和其关联的类型。
+XML序列化只能序列化对象的公有属性，并且要求对象有一个无参的构造方法，否者无法反序列化。
+[Serializable]和[NonSerialized]特性对XML序列化无效！所以使用XML序列化时不需要对对象增加[Serializable]特性。
+

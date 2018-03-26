@@ -7,14 +7,14 @@ using DesignPattern.Decoration;
 
 namespace DesignPattern.Decoration.hair
 {
-   public class BalckHair:AbstractDecoration
+   public class RedHair:AbstractDecoration
     {
-        public BalckHair(IFunction function):base(function) {
+        public RedHair(IFunction function):base(function) {
            
         }
-        public new string decribe()
+        public string decribe()
         {
-            return base.decribe()+"黑色的头发";
+            return base.decribe()+"红色的头发";
         }
     }
 }
